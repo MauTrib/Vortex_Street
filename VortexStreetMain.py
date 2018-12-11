@@ -8,14 +8,13 @@ from Variables import *
 
 
 
-###BOUCLE TEMPORELLE
 print("Début des calculs...")
 t_deb = time.time()
 while (dontstop):
     niter+=1
     
     
-    dt = min(dt, CFL_advection(), dt_exp) 
+    dt = min(dt, CFL_advection(u,v,U,dmin,precautionADV), dt_exp) 
     
     t+=dt                                        #Avancement du temps total
   
@@ -25,57 +24,36 @@ while (dontstop):
     
     #ETAPE D'ADVECTION SEMI-LAGRANGIENNE
     if (montrer_perf): t1 = time.time()
-    Advect()
+    Resu,Resv,Rescol = Advect(u,v,col,NX,NY,dx,dy,dt)
     if (montrer_perf) : t2 = time.time() ; tadv += t2-t1
     
     #ETAPE DE DIFFUSION
     if (RK2):
-        ustar = Resu + D*Laplacien( u + dt/2 * D*Laplacien(u) ) * dt
-        vstar = Resv + D*Laplacien( v + dt/2 * D*Laplacien(v) ) * dt
+        ustar = Resu + D*Laplacien( u + dt/2 * D*Laplacien(u,dx_2,dy_2) ,dx_2,dy_2) * dt
+        vstar = Resv + D*Laplacien( v + dt/2 * D*Laplacien(v,dx_2,dy_2) ,dx_2,dy_2) * dt
     else:
-        ustar = Resu + D*Laplacien(u)*dt
-        vstar = Resv + D*Laplacien(v)*dt
+        ustar = Resu + D*Laplacien(u,dx_2,dy_2)*dt
+        vstar = Resv + D*Laplacien(v,dx_2,dy_2)*dt
     
     if (montrer_perf) : t3 = time.time() ; tdiff += t3-t2
     
     #CONDITIONS AUX LIMITES SUR LES VITESSES ETOILES
-      
-    """ 
-    #Avec les nouvelles conditions aux limites:
-    #Possibilités 'grad', 'nul', un nombre ou un array
-    #g,d,h,v (gauche, droite, haut, bas)
-    g_u, g_v, d_u, d_v, h_u, h_v, b_u, b_v = ....
-    conditions_limites(ustar,g_u,d_u,h_u,b_u)
-    conditions_limites(vstar,g_v,d_v,h_v,b_v)
-    #Obstacle:
-    A faire: idée appliquer une liste de mask
-    """  
-    ConditionLimites(ustar,vstar)                        #Sur les bords du domaine
+    ConditionLimites(ustar,vstar,U)                        #Sur les bords du domaine
     
     ustar[(ox-x_c)**2+(oy-y_c)**2 < L**2] = 0                                           #Sur l'obstacle, penalisation
     vstar[(ox-x_c)**2+(oy-y_c)**2 < L**2] = 0     
 
     #ETAPE DE PROJECTION
-    divstar = divergence(ustar,vstar)                    #Calcul de la divergence de u*
+    divstar = divergence(ustar,vstar,dx,dy)                    #Calcul de la divergence de u*
     phi[1:-1,1:-1] = ResoLap(LUPoisson,divstar[1:-1,1:-1])        #Résolution du système
     PhiGhostPoints(phi)                                #Mise à jour des points fantomes de phi
-    u = ustar-grad(phi)[0]                            #Calcul de u et v
-    v = vstar-grad(phi)[1]
-    if (affichage == 'col'):
-            col = Rescol
+    u = ustar-grad(phi,dx,dy)[0]                            #Calcul de u et v
+    v = vstar-grad(phi,dx,dy)[1]
+    col = Rescol
     if (montrer_perf) : t4 = time.time() ; tphi += t4-t3
     
     #CONDITIONS AUX LIMITES
-      
-    """ 
-    #Avec les nouvelles conditions aux limites:
-    conditions_limites(u,g_u,d_u,h_u,b_u)
-    conditions_limites(v,g_v,d_v,h_v,b_v)
-    #Obstacle:
-    
-    """  
-    
-    ConditionLimites(u,v)                            #Sur les bords du domaine
+    ConditionLimites(u,v,U)                            #Sur les bords du domaine
     u[(ox-x_c)**2+(oy-y_c)**2 < L**2]=0                                            #Sur l'obstacle, penalisation
     v[(ox-x_c)**2+(oy-y_c)**2 < L**2]=0                                             #Sur l'obstacle, penalisation
     
@@ -99,7 +77,7 @@ while (dontstop):
         elif (affichage == 'abs'):
             mat = np.sqrt( u[1:-1,1:-1]**2 + v[1:-1,1:-1]**2 )
         elif (affichage == 'rot'):
-            mat = rot(u,v)
+            mat = rot(u,v,dx,dy)
             title = r'$\omega$ = curl(v)'
         elif (affichage == 'p'):
             mat = phi[1:-1,1:-1]/dt
