@@ -221,6 +221,18 @@ def conditions_limites(f,g,d,h,b):
     else:
         f[-1,1:-1] = d*np.ones(nx)
 
+def Apply_objects(f,xx,yy,l_objects):
+    """
+    Applique un objet sur un array.
+    Dans un objet, la vitesse est mise à zéro.
+    Entrées: - f, l'array
+             - xx,yy : les deux composantes d'un meshgrid
+             - l_objects : liste d'objets, chacun possédant une fonction "get_mask(xx,yy)"
+    """
+    for objet in l_objects:
+        f[l_objects.get_mask(xx,yy)]==0
+    return f
+
 def ConditionLimites(u,v,U):
     """Conditions aux limites aux bords du domaine"""
     ny,nx = u[1:-1,1:-1].shape
