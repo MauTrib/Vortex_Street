@@ -9,49 +9,6 @@ from Variables import *
 initialize()
 
 
-#### PARAMETRES CHOISIS PAR L'UTILISATEURICE (à modifier pour changer le résultat) 
-#----------------------------------------------------------------------------------------------------------------------------------------------------
- ### PARAMETRES PHYSIQUES 
-   # Taille de l'objet (taille caractéristique) (a priori,  = 1)
-L = 1.  
-   # Vitesse caractéristique (a priori, = 1)
-U = 1.
-   # Nombre de Reynolds (contrôle tout : en log, entre -8 et 10 )
-Re = 1000;
-   # Sur quel temps on simule
-tfinal = 50.
- 
- ### PARAMETRES NUMERIQUES
-  ## Paramètres fondamentaux 
-'''
-mode : choisis le mode d'intégration. Trois possibilités : 
-     * 'iterations'   -> Le nombre d'étapes est fixé. Le temps final n'est pas connu.
-     * 'time'         -> tfinal est fixé. le nombre d'étapes n'est pas connu (ATTENTION)
-     * 'time_bounded' -> comme 'time' mais avec une limite pour le nombre d'étapes
-'''
-mode = 'iterations'
-   # Combien de timesteps au maximum on s'autorise
-nitermax = 2000
-   # Nombre de pixels du domaine :
-NX = 256 ; NY = 128
-   # Largeur du canal. On doit avoir LY > 2*L
-LY = 10*L
-   # Longueur du canal. Les pixels sont carrés ssi LX = LY*nx/ny
-LX = LY * (NX-2)/(NY-2)
-   # Emplacement de l'obstacle
-x_c = (1/4)*LX
-y_c = LY/2
-
-  ## Paramètres d'optimisation
-   # Marge sur le temps d'advection pour éviter la divergence : dt = precautionADV*dt_calculé
-precautionADV = 0.95				
-   # Marge sur le temps de diffusion pour éviter la divergence : dt = precautionDIFF*dt_calculé							
-precautionDIFF = 0.9 												
-   # RK2 : utilise une méthode RK2 pour le Laplacien (sécurité à bas Re)
-RK2 = True
-   # veriffactor : si 1, ne fait rien ; si > 1 : fait la même simulation avec des plus petits pas de temps
-veriffactor = 1
-
 
  ### PARAMETRES D'AFFICHAGE 
    # combien on affiche de frames (pertinent si save == False)
@@ -340,6 +297,17 @@ while (dontstop):
     if (montrer_perf) : t3 = time.time() ; tdiff += t3-t2
     
     #CONDITIONS AUX LIMITES SUR LES VITESSES ETOILES
+      
+    """ 
+    #Avec les nouvelles conditions aux limites:
+    #Possibilités 'grad', 'nul', un nombre ou un array
+    #g,d,h,v (gauche, droite, haut, bas)
+    g_u, g_v, d_u, d_v, h_u, h_v, b_u, b_v = ....
+    conditions_limites(ustar,g_u,d_u,h_u,b_u)
+    conditions_limites(vstar,g_v,d_v,h_v,b_v)
+    #Obstacle:
+    A faire: idée appliquer une liste de mask
+    """  
     ConditionLimites(ustar,vstar)                        #Sur les bords du domaine
     
     ustar[(ox-x_c)**2+(oy-y_c)**2 < L**2] = 0                                           #Sur l'obstacle, penalisation
@@ -356,6 +324,15 @@ while (dontstop):
     if (montrer_perf) : t4 = time.time() ; tphi += t4-t3
     
     #CONDITIONS AUX LIMITES
+      
+    """ 
+    #Avec les nouvelles conditions aux limites:
+    conditions_limites(u,g_u,d_u,h_u,b_u)
+    conditions_limites(v,g_v,d_v,h_v,b_v)
+    #Obstacle:
+    
+    """  
+    
     ConditionLimites(u,v)                            #Sur les bords du domaine
     u[(ox-x_c)**2+(oy-y_c)**2 < L**2]=0                                            #Sur l'obstacle, penalisation
     v[(ox-x_c)**2+(oy-y_c)**2 < L**2]=0                                             #Sur l'obstacle, penalisation
