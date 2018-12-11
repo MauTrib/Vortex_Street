@@ -11,6 +11,7 @@ from PyQt5 import QtWidgets # affichage (reactualisation)
 import matplotlib.colors as colors # faire des jolies couleurs
 import time as time # montrer_performances (affiche la durée réelle du programme)
 
+
 ### FONCTIONS
 
   # disptime(t) : affiche une durée t en secondes, minutes, etc...
@@ -31,21 +32,20 @@ def disptime(t):
     else : return(str(t)+" s")
 
   # CFL_advection() : donne le dt maximal adapté à l'étape d'advection
-def CFL_advection():
-    global u,v, U, dmin, precautionADV
+def CFL_advection(u,v,U,dmin,precautionADV):
     umax = max( np.amax(np.abs(v)) , np.amax(np.abs(u)) , U)
     dt_cfa= dmin/umax * precautionADV
     return dt_cfa
     
   # CFL_diffusion() : donne le dt maximal adapté à l'étape de diffusion
-def CFL_diffusion():
-    global D, dmin, precautionDIFF
+def CFL_diffusion(D,dmin,precautionDIFF):
     dt_cfl = dmin**2/(4*D) * precautionDIFF
     return dt_cfl
 
   # Advect() : renvoie la valeur interpolée qui correspond à l'advection de la vitesse
-def Advect():
-    global NX, NY, dx, dy, dt, atot, Resu, Resv, Resc, u, v
+def Advect(u,v,c,NX,NY,dx,dy,dt):
+    
+    atot = dx*dy
     
     u_r = - u[1:-1,1:-1]
     v_r = - v[1:-1,1:-1]
@@ -63,18 +63,22 @@ def Advect():
     
     # Calcul des matrices de resultat pour les vitesses u et v
     
+    Resu = np.zeros((NY,NX))
+    Resv = np.zeros((NY,NX))
+    Rescol = np.zeros((NY,NX))
+    
     Resu[1:-1,1:-1] = a_center*u[1:-1,1:-1] + a_diag*(Mu_p*Mv_p*u[:-2,2:]+Mu_p*Mv_n*u[2:,2:]+Mu_n*Mv_p*u[:-2,:-2]+Mu_n*Mv_n*u[2:,:-2]) + a_rl*(Mu_p*u[1:-1,2:]+Mu_n*u[1:-1,:-2])+a_updown*(Mv_p*u[:-2,1:-1]+Mv_n*u[2:,1:-1])
     
     Resv[1:-1,1:-1] = a_center*v[1:-1,1:-1] + a_diag*(Mu_p*Mv_p*v[:-2,2:]+Mu_p*Mv_n*v[2:,2:]+Mu_n*Mv_p*v[:-2,:-2]+Mu_n*Mv_n*v[2:,:-2]) + a_rl*(Mu_p*v[1:-1,2:]+Mu_n*v[1:-1,:-2])+a_updown*(Mv_p*v[:-2,1:-1]+Mv_n*v[2:,1:-1])
     
-    Resc[1:-1,1:-1] = a_center*c[1:-1,1:-1] + a_diag*(Mu_p*Mv_p*c[:-2,2:]+Mu_p*Mv_n*c[2:,2:]+Mu_n*Mv_p*c[:-2,:-2]+Mu_n*Mv_n*c[2:,:-2]) + a_rl*(Mu_p*c[1:-1,2:]+Mu_n*c[1:-1,:-2])+a_updown*(Mv_p*c[:-2,1:-1]+Mv_n*c[2:,1:-1])
+    Rescol[1:-1,1:-1] = a_center*c[1:-1,1:-1] + a_diag*(Mu_p*Mv_p*c[:-2,2:]+Mu_p*Mv_n*c[2:,2:]+Mu_n*Mv_p*c[:-2,:-2]+Mu_n*Mv_n*c[2:,:-2]) + a_rl*(Mu_p*c[1:-1,2:]+Mu_n*c[1:-1,:-2])+a_updown*(Mv_p*c[:-2,1:-1]+Mv_n*c[2:,1:-1])
 
-    return 0
+    return Resu,Resv,Rescol
 
-def BuildLaPoisson():
+def BuildLaPoisson(nx,ny,dx_2,dy_2):
     """pour l'étape de projection matrice de Laplacien phi avec CL Neumann pour phi BUT condition de Neumann pour phi ==> non unicite de la solution 
   besoin de fixer la pression en un point pour lever la degenerescence: ici [0][1]==> need to build a correction matrix"""
-    global nx,ny,dx_2,dy_2                        # ne pas prendre en compte les points fantome (-2)
+    # ne pas prendre en compte les points fantome (-2)
     ###### Definition de l'opérateur de Laplace 1D
     ###### AXE X
     datanx = [np.ones(nx), -2*np.ones(nx), np.ones(nx)]      # Termes diagonaux
@@ -119,35 +123,36 @@ def ResoLap(splu,RHS):
     x = splu.solve(f2)
     return x.reshape(RHS.shape)
 
-def Laplacien(f):
+def Laplacien(f,dx_2,dy_2):
     """Calcule le laplacien scalaire du champ scalaire f avec points fantomes"""
-    global NX,NY,dx_2,dy_2
+    NY,NX = f.shape
     lapv = np.zeros((NY,NX))
   # ecrit le 1811210940 par G
     lapv[1:-1,1:-1] = ( f[2: ,1:-1] - 2*f[1:-1,1:-1] + f[ :-2,1:-1] ) * dy_2 + ( f[1:-1,2: ] - 2*f[1:-1,1:-1] + f[1:-1, :-2] ) * dx_2   # derivee selon y
     return lapv
     
-def divergence(u,v):
+def divergence(u,v,dx,dy):
     """Divergence à l'ordre 2 avec points fantomes
   On utilise la formule de la dérivée du(x)/dx = (u(x+dx)-u(x-dx))/(2dx)
-  """                          
-    global NX,NY,dx,dy
+  """      
+    NY,NX = u.shape
     divv = np.zeros((NY,NX))     
     divv[1:-1,1:-1] = (u[1:-1,2:]-u[1:-1,:-2])/(2*dx) + (v[:-2:,1:-1]-v[2:,1:-1])/(2*dy)
     return divv
     
-def grad(f):
+def grad(f,dx,dy):
     """Gradient de f à l'ordre 2
   Même méthode que pour la divergence ici, pour l'ordre 2"""
-    global NX,NY,dx,dy
+    NY,NX = f.shape
+    
     gradfx = np.zeros((NY,NX))
     gradfy = np.zeros((NY,NX))
     gradfy[1:-1,:] = (f[:-2,:]-f[2:,:])/(2*dy)
     gradfx[:,1:-1] = (f[:,2:]-f[:,:-2])/(2*dx)
     return [gradfx,gradfy]
 
-def rot(u,v):
-    global dx, dy
+def rot(u,v,dx,dy):
+    ny,nx = u[1:-1,1:-1].shape
     RRR = np.zeros([ny, nx])
     RRR = (v[1:-1,2:]-v[1:-1,:-2])/(2*dx) - (u[:-2,1:-1]-u[2:,1:-1])/(2*dy) 
     return RRR
@@ -161,6 +166,7 @@ def PhiGhostPoints(phi):
     global ==> pas de return 
 
     """
+    ny,nx = phi[1:-1,1:-1].shape
     ### left               
     phi[1:-1,0] = phi[1:-1,2]
     ### right             
@@ -177,7 +183,7 @@ def conditions_limites(f,g,d,h,b):
     -'nul' la composante est nulle (paroi)
     -les"""
     
-    nx, ny = len(f[0])-2, len(f)-2
+    ny, nx = f[1:-1].shape
     
     if g=='grad':
         f[1:-1,0] = f[1:-1,2]
@@ -214,6 +220,22 @@ def conditions_limites(f,g,d,h,b):
         f[-1,1:-1] = b
     else:
         f[-1,1:-1] = d*np.ones(nx)
-        
-        
-   
+
+def ConditionLimites(u,v,U):
+    """Conditions aux limites aux bords du domaine"""
+    ny,nx = u[1:-1,1:-1].shape
+  #Left
+    u[1:-1,0] = U*np.ones(ny)  # *U*( 1 + np.random.rand(ny)*0.01 )
+    v[1:-1,0] = np.zeros(ny) 
+    
+  #Right
+    u[1:-1,-1] = u[1:-1,-3] #gradient de la vitesse nul selon x au bord droit
+    v[1:-1,-1] = v[1:-1,-3] 	#gradient de la vitesse nul selon y au bord droit
+    
+  #Up
+    u[0,1:-1] = u[2,1:-1] #gradient de la vitesse nul selon x en haut 
+    v[0,1:-1] = np.zeros(nx) #condition de non pénétration (vitesse verticale nulle)
+    
+  #Down
+    u[-1,1:-1] = u[-3,1:-1] #gradient de la vitesse nul selon x en bas
+    v[-1,1:-1] = np.zeros(nx) #condition de non pénétration (vitesse verticale nulle)
