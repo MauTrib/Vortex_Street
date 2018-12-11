@@ -8,6 +8,7 @@ Trucs à faire pour la propreté du code :
 
 ** LISIBILITE
  * commenter ce qui reste à commenter (lignes 400 et +)
+ * continuer à séparer le projet en différents fichiers pour séparer ce qui est le code
  
 ** FEATURES
  * Mettre l'obstacles dans la fonction CL
