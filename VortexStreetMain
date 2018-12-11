@@ -1,6 +1,6 @@
 # main program
    
-# Import des fonctions
+# Import des autres fichiers
 
 from fonctions import *
 from Objects import *
