@@ -178,7 +178,7 @@ def PhiGhostPoints(phi):
     ### top               
     phi[0,1:-1] = phi[2,1:-1]
     
-def condition_limites(u,g,d,h,b):
+def conditions_limites(u,g,d,h,b):
     """Définit les conditions aux limites sur les composantes de la vitesse.
     g, d, h, b sont des chaines de caractères ou un tableau de valeurs ou une constante qui peuvent valoir:
     -'grad', le gradient est nul
