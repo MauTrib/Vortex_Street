@@ -40,7 +40,7 @@ while (dontstop):
     #CONDITIONS AUX LIMITES SUR LES VITESSES ETOILES
      
    
-     """ 
+    """ 
      #Avec les nouvelles conditions aux limites:
      #Possibilités 'grad', 'nul', un nombre ou un array
      #g,d,h,v (gauche, droite, haut, bas)
@@ -49,7 +49,7 @@ while (dontstop):
      conditions_limites(vstar,g_v,d_v,h_v,b_v)
      #Obstacle:
      A faire: idée appliquer une liste de mask
-     """  
+    """  
     ConditionLimites(ustar,vstar,U)                        #Sur les bords du domaine
     
     ustar[(ox-x_c)**2+(oy-y_c)**2 < L**2] = 0                                           #Sur l'obstacle, penalisation
