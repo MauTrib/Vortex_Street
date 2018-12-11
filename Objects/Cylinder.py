@@ -9,7 +9,7 @@ class Cylinder:
         self.R = R
     
     def get_mask(self,xx,yy):
-        return ((xx-self.x_c)**2+(yy-self.y_c)**2 < R**2)
+        return ((xx-self.x_c)**2+(yy-self.y_c)**2 < self.R**2)
     
     def __repr__(self):
-        return "Cylinder object\nCenter={}, Radius={}".format(self.center,self.R)
+        return "Cylinder object : Center={}, Radius={}".format(self.center,self.R)

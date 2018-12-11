@@ -3,7 +3,8 @@
 # Import des autres fichiers
 
 from fonctions import *
-from Objects import *
+from Objects.Cylinder import Cylinder
+from Objects.Rotating_Bar import R_Bar
 from Variables import *
 
 
@@ -52,8 +53,8 @@ while (dontstop):
     """  
     ConditionLimites(ustar,vstar,U)                        #Sur les bords du domaine
     
-    ustar[(ox-x_c)**2+(oy-y_c)**2 < L**2] = 0                                           #Sur l'obstacle, penalisation
-    vstar[(ox-x_c)**2+(oy-y_c)**2 < L**2] = 0     
+    ustar = Apply_objects(ustar,ox,oy,l_objects)                                           #Sur l'obstacle, penalisation
+    vstar = Apply_objects(vstar,ox,oy,l_objects)
 
     #ETAPE DE PROJECTION
     divstar = divergence(ustar,vstar,dx,dy)                    #Calcul de la divergence de u*
@@ -73,8 +74,8 @@ while (dontstop):
      
     """
     ConditionLimites(u,v,U)                            #Sur les bords du domaine
-    u[(ox-x_c)**2+(oy-y_c)**2 < L**2]=0                                            #Sur l'obstacle, penalisation
-    v[(ox-x_c)**2+(oy-y_c)**2 < L**2]=0                                             #Sur l'obstacle, penalisation
+    u = Apply_objects(u,ox,oy,l_objects)                                            #Sur l'obstacle, penalisation
+    v = Apply_objects(v,ox,oy,l_objects)                                             #Sur l'obstacle, penalisation
     
     #AFFICHAGE DE LA FIGURE
     if ( (save_mode == 'iterations') and (nitermax-niter-1)%modulo == 0 ) or ( save and ( (save_mode == 'time') and ( (t-t_ref) > modulo ) ) ):

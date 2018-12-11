@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from fonctions import *
+from Objects.Cylinder import Cylinder
+from Objects.Rotating_Bar import R_Bar
 
 #### PARAMETRES CHOISIS PAR L'UTILISATEURICE (à modifier pour changer le résultat) 
 #----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -51,7 +53,7 @@ nFrames = 20
    # le nombre de dpi. 100 est la taille normale
 taille_figure = 100
    # on affiche la boule d'une couleur différente ?
-display_form = True
+display_form = False
    # la couleur (en format RGB avec des valeurs entre 0 et 1 OU entre 0 et 255)
 color_form = [0.2, 0.1, 0.1]
    # est ce qu'on sauvegarde
@@ -75,7 +77,7 @@ affichage : ce qu'on affiche. Plusieurs possibilités :
     * 'rot'  : affichage du rotationnel
     * 'p'    : affichae de la pression
 '''
-affichage = 'u'
+affichage = 'p'
 # flux de colorant : 'all' ou un nombre
 nombreDeStreams = 9			
 # le scaling
@@ -126,6 +128,11 @@ dt_exp = CFL_diffusion(D,dmin,precautionDIFF)
    # Combien de timesteps au maximum on s'autorise
 if (mode == 'time_bounded'):
     nitermax = int( 2.* tfinal / min( dt, dt_exp, dmin/U * precautionADV ) )
+
+#Création de la liste d'objets:
+l_objects = []
+
+l_objects.append(Cylinder(x_c=x_c,y_c=y_c))
 
  ### PARAMETRES D'AFFICHAGE 
   ## Affichage de la figure

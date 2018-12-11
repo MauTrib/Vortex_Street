@@ -230,7 +230,7 @@ def Apply_objects(f,xx,yy,l_objects):
              - l_objects : liste d'objets, chacun possédant une fonction "get_mask(xx,yy)"
     """
     for objet in l_objects:
-        f[l_objects.get_mask(xx,yy)]==0
+        f[objet.get_mask(xx,yy)]=0
     return f
 
 def ConditionLimites(u,v,U):
