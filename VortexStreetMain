@@ -1,5 +1,10 @@
 # main program
-    
+   
+# Import des fonctions
+
+from fonctions import *
+from Objects
+
 #### PARAMETRES CHOISIS PAR L'UTILISATEURICE (à modifier pour changer le résultat) 
 #----------------------------------------------------------------------------------------------------------------------------------------------------
  ### PARAMETRES PHYSIQUES 
