@@ -125,7 +125,7 @@ precautionADV /= veriffactor
 precautionDIFF /= veriffactor ; 
 nitermax *= veriffactor
    # Le dt maximal en prenant en compte l'étape de diffusion
-dt_exp = CFL_diffusion()
+dt_exp = CFL_diffusion(D,dmin,precautionDIFF)
    # Combien de timesteps au maximum on s'autorise
 if (mode == 'time_bounded'):
     nitermax = int( 2.* tfinal / min( dt, dt_exp, dmin/U * precautionADV ) )
@@ -243,17 +243,12 @@ ConditionLimites(u,v)
 #COLORANT
 col = np.zeros((NY,NX))
 
-Resu = np.zeros((NY,NX))
-Resv = np.zeros((NY,NX))
-Rescol = np.zeros((NY,NX))
-
-
 #PRESSION PHI
 phi = np.zeros((NY,NX)) 				# phi = P*dt
 
  
 ###CONSTRUCTION DES MATRICES ET DECOMPOSITION LU POUR L'ETAPE DE PROJECTION
-LAPoisson = BuildLaPoisson() 
+LAPoisson = BuildLaPoisson(nx,ny,dx_2,dy_2) 
 LUPoisson = ILUdecomposition(LAPoisson)
 
 ###MAILLAGE POUR L'AFFICHAGE SANS LES POINTS FANTOMES
