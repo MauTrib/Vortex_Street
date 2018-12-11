@@ -189,31 +189,31 @@ def conditions_limites(f,g,d,h,b):
         f[1:-1,0] = g*np.ones(ny)
         
     if d=='grad':
-        u[1:-1,-1] = u[1:-1,-3]
+        f[1:-1,-1] = f[1:-1,-3]
     elif d=='nul':
-        u[1:-1,-1]= np.zeros(ny)
+        f[1:-1,-1]= np.zeros(ny)
     elif type(d)==np.ndarray:
-        u[1:-1,-1] = d
+        f[1:-1,-1] = d
     else:
-        u[1:-1,-1] = d*np.ones(ny)
+        f[1:-1,-1] = d*np.ones(ny)
         
     if h=='grad':
-        u[0,1:-1] = u[2,1:-1]
+        f[0,1:-1] = f[2,1:-1]
     elif h=='nul':
-        u[0,1:-1] = np.zeros(nx)
+        f[0,1:-1] = np.zeros(nx)
     elif type(h)==np.ndarray:
-        u[0,1:-1] = h
+        f[0,1:-1] = h
     else:
-        u[0,1:-1] = h*np.ones(nx)
+        f[0,1:-1] = h*np.ones(nx)
         
     if b=='grad':
-        u[-1,1:-1] = u[-3,1:-1]
+        f[-1,1:-1] = f[-3,1:-1]
     elif b=='nul':
-        u[-1,1:-1] = np.zeros(nx)
+        f[-1,1:-1] = np.zeros(nx)
     elif type(b)==np.ndarray:
-        u[-1,1:-1] = b
+        f[-1,1:-1] = b
     else:
-        u[-1,1:-1] = d*np.ones(nx)
+        f[-1,1:-1] = d*np.ones(nx)
         
         
    
