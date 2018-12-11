@@ -38,6 +38,18 @@ while (dontstop):
     if (montrer_perf) : t3 = time.time() ; tdiff += t3-t2
     
     #CONDITIONS AUX LIMITES SUR LES VITESSES ETOILES
+     
+   
+     """ 
+     #Avec les nouvelles conditions aux limites:
+     #Possibilités 'grad', 'nul', un nombre ou un array
+     #g,d,h,v (gauche, droite, haut, bas)
+     g_u, g_v, d_u, d_v, h_u, h_v, b_u, b_v = ....
+     conditions_limites(ustar,g_u,d_u,h_u,b_u)
+     conditions_limites(vstar,g_v,d_v,h_v,b_v)
+     #Obstacle:
+     A faire: idée appliquer une liste de mask
+     """  
     ConditionLimites(ustar,vstar,U)                        #Sur les bords du domaine
     
     ustar[(ox-x_c)**2+(oy-y_c)**2 < L**2] = 0                                           #Sur l'obstacle, penalisation
@@ -53,6 +65,13 @@ while (dontstop):
     if (montrer_perf) : t4 = time.time() ; tphi += t4-t3
     
     #CONDITIONS AUX LIMITES
+      
+    """
+    #Avec les nouvelles conditions aux limites:
+    conditions_limites(u,g_u,d_u,h_u,b_u)
+    conditions_limites(v,g_v,d_v,h_v,b_v)
+     
+    """
     ConditionLimites(u,v,U)                            #Sur les bords du domaine
     u[(ox-x_c)**2+(oy-y_c)**2 < L**2]=0                                            #Sur l'obstacle, penalisation
     v[(ox-x_c)**2+(oy-y_c)**2 < L**2]=0                                             #Sur l'obstacle, penalisation
