@@ -28,7 +28,7 @@ mode = 'iterations'
    # Combien de timesteps au maximum on s'autorise
 nitermax = 2000
    # Nombre de pixels du domaine :
-NX = 256 ; NY = 128
+NX = 256*4 ; NY = 128*4
    # Largeur du canal. On doit avoir LY > 2*L
 LY = 10*L
    # Longueur du canal. Les pixels sont carrés ssi LX = LY*nx/ny
@@ -57,7 +57,7 @@ display_form = False
    # la couleur (en format RGB avec des valeurs entre 0 et 1 OU entre 0 et 255)
 color_form = [0.2, 0.1, 0.1]
    # est ce qu'on sauvegarde
-save = False
+save = True
 '''
 save_mode : choisis le mode d'enregistrement. Deux possibilités : 
      * 'iterations'   -> On enregistre toutes les Delta_n etapes
@@ -140,6 +140,7 @@ fig = plt.figure(dpi=taille_figure)
   ## Frequence d'affichage
    # nombre de frames
 if (save):
+    
     if (save_mode == 'iterations'):
         if (qualite_video == 'low'):
             nFrames = int(50*nitermax/1000)
@@ -280,7 +281,7 @@ if (display_form):
     plt.imshow(z[1:-1,1:-1,:], extent=[-x_c,LX-x_c,-y_c,LY-y_c])
 
 plt.colorbar(AFF,fraction=0.0232, pad=0.04)
-
+size = plt.gcf().get_size_inches()
 plt.show()
 
 compt = 0    # Permet de savoir combien de frame ont été affichées

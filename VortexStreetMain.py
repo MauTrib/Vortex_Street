@@ -132,6 +132,7 @@ while (dontstop):
                     nb = ''+str(compt)
             name = 'BVK_'+nb+'.png'
             plt.savefig( os.path.join(save_directory,name) )
+            plt.gcf().set_size_inches(size)
         plt.pause(0.001)
         if 'qt' in plt.get_backend().lower():
             QtWidgets.QApplication.processEvents()
