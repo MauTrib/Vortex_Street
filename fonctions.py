@@ -175,7 +175,7 @@ def conditions_limites(f,g,d,h,b):
     g, d, h, b sont des chaines de caractères ou un tableau de valeurs ou une constante qui peuvent valoir:
     -'grad', le gradient est nul
     -'nul' la composante est nulle (paroi)
-    -les"""
+    """
     
     nx, ny = len(f[0])-2, len(f)-2
     
