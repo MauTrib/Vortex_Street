@@ -4,6 +4,9 @@
 
 from fonctions import *
 from Objects import *
+from Variables import *
+
+initialize()
 
 
 #### PARAMETRES CHOISIS PAR L'UTILISATEURICE (à modifier pour changer le résultat) 

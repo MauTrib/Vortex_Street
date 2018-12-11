@@ -8,3 +8,4 @@ Created on Tue Dec 11 15:21:45 2018
 def initialize():
     global dmin
     dmin=1
+    print("done")
