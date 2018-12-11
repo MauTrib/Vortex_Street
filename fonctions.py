@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Dec 11 14:20:53 2018
-
-@author: alienor
-"""
-
 """
 Fonctions
 """
@@ -178,20 +170,23 @@ def PhiGhostPoints(phi):
     ### top               
     phi[0,1:-1] = phi[2,1:-1]
     
-def conditions_limites(u,g,d,h,b):
+def conditions_limites(f,g,d,h,b):
     """Définit les conditions aux limites sur les composantes de la vitesse.
     g, d, h, b sont des chaines de caractères ou un tableau de valeurs ou une constante qui peuvent valoir:
     -'grad', le gradient est nul
     -'nul' la composante est nulle (paroi)
     -les"""
+    
+    nx, ny = len(f[0])-2, len(f)-2
+    
     if g=='grad':
-        u[1:-1,0] = u[1:-1,2]
+        f[1:-1,0] = f[1:-1,2]
     elif g=='nul':
-        u[1:-1,0] = np.zeros(ny)
+        f[1:-1,0] = np.zeros( ny )
     elif type(g)==np.ndarray:
-        u[1:-1,0] = g
+        f[1:-1,0] = g
     else:
-        u[1:-1,0] = g*np.ones(ny)
+        f[1:-1,0] = g*np.ones(ny)
         
     if d=='grad':
         u[1:-1,-1] = u[1:-1,-3]
