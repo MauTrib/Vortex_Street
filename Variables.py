@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Dec 11 15:21:45 2018
 
-@author: MauTrib
-"""
+from fonctions import *
 
 #### PARAMETRES CHOISIS PAR L'UTILISATEURICE (à modifier pour changer le résultat) 
 #----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -239,7 +236,7 @@ u[1:-1,1:-1] +=  np.random.rand(ny,nx)*U*0.001 						# impuretés pour briser la
 
 v = np.zeros((NY,NX))
 
-ConditionLimites(u,v)
+ConditionLimites(u,v,U)
 #COLORANT
 col = np.zeros((NY,NX))
 
