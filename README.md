@@ -1,8 +1,6 @@
 # Vortex_Street
 COMPUTATIONAL PHYSICS PROJECT DAAAAAAAMN
 
-# -*- ucoding: utf-8 -*-
-"""
 LE SUPER PROJET D'INFO QUI EST TECHNIQUEMENT FINI MAIS QU'ON PEUT ENCORE PIMPER
 
 
@@ -30,5 +28,3 @@ Trucs à tenter quand tout marchera et sera propre :
   * Rajouter la force en fonction de la température -> RAYLEIGH BENAAAARD
 
 <3 sur toi qui as fait tout ça
-
-"""
