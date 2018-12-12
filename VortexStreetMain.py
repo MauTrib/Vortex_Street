@@ -132,7 +132,7 @@ while (dontstop):
                     nb = ''+str(compt)
             name = 'BVK_'+nb+'.png'
             plt.gcf().set_size_inches(figsize)
-            plt.savefig( os.path.join(save_directory,name) ,dpi=realdpi)
+            plt.savefig( os.path.join(save_directory,name) ,dpi=max(100,realdpi))
             plt.gcf().set_size_inches(figsize)
         plt.pause(0.001)
         if 'qt' in plt.get_backend().lower():
