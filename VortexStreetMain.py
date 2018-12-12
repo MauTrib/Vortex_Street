@@ -131,9 +131,9 @@ while (dontstop):
             elif compt<10000:
                     nb = ''+str(compt)
             name = 'BVK_'+nb+'.png'
-            plt.gcf().set_size_inches(size)
+            plt.gcf().set_size_inches(figsize)
             plt.savefig( os.path.join(save_directory,name) ,dpi=realdpi)
-            plt.gcf().set_size_inches(size)
+            plt.gcf().set_size_inches(figsize)
         plt.pause(0.001)
         if 'qt' in plt.get_backend().lower():
             QtWidgets.QApplication.processEvents()

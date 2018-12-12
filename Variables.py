@@ -28,7 +28,7 @@ mode = 'iterations'
    # Combien de timesteps au maximum on s'autorise
 nitermax = 20000
    # Nombre de pixels du domaine :
-NX = 256*5 ; NY = 128*5 + 1
+NX = 256*1 ; NY = 128*1 + 1
    # Largeur du canal. On doit avoir LY > 2*L
 LY = 10*L
    # Longueur du canal. Les pixels sont carrés ssi LX = LY*nx/ny
