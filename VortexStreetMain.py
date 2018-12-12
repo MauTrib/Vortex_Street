@@ -21,7 +21,7 @@ while (dontstop):
   
     #COLORANT AJOUTE A LA PREMIERE COLONNE
     for i in pointsAjoutColorant:
-        col[i,0] = 1
+        col[i,1] = 1
     
     #ETAPE D'ADVECTION SEMI-LAGRANGIENNE
     if (montrer_perf): t1 = time.time()
@@ -62,7 +62,7 @@ while (dontstop):
     PhiGhostPoints(phi)                                #Mise à jour des points fantomes de phi
     u = ustar-grad(phi,dx,dy)[0]                            #Calcul de u et v
     v = vstar-grad(phi,dx,dy)[1]
-    col = Rescol
+    
     if (montrer_perf) : t4 = time.time() ; tphi += t4-t3
     
     #CONDITIONS AUX LIMITES
@@ -76,13 +76,13 @@ while (dontstop):
     ConditionLimites(u,v,U)                            #Sur les bords du domaine
     u = Apply_objects(u,ox,oy,l_objects)                                            #Sur l'obstacle, penalisation
     v = Apply_objects(v,ox,oy,l_objects)                                             #Sur l'obstacle, penalisation
-    
+    col = Rescol
     #AFFICHAGE DE LA FIGURE
     if ( (save_mode == 'iterations') and (nitermax-niter-1)%modulo == 0 ) or ( save and ( (save_mode == 'time') and ( (t-t_ref) > modulo ) ) ):
         t_ref = t
         compt+=1
         #print(np.sum(c))
-        
+        l_objects[0].theta += 2*np.pi *dt/50
         #affichage
          
         if (affichage == 'col'):
@@ -131,7 +131,9 @@ while (dontstop):
             elif compt<10000:
                     nb = ''+str(compt)
             name = 'BVK_'+nb+'.png'
-            plt.savefig( os.path.join(save_directory,name) )
+            plt.gcf().set_size_inches(size)
+            plt.savefig( os.path.join(save_directory,name) ,dpi=realdpi)
+            plt.gcf().set_size_inches(size)
         plt.pause(0.001)
         if 'qt' in plt.get_backend().lower():
             QtWidgets.QApplication.processEvents()

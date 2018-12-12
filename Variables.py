@@ -26,9 +26,9 @@ mode : choisis le mode d'intégration. Trois possibilités :
 '''
 mode = 'iterations'
    # Combien de timesteps au maximum on s'autorise
-nitermax = 2000
+nitermax = 20000
    # Nombre de pixels du domaine :
-NX = 256 ; NY = 128
+NX = 256*5 ; NY = 128*5 + 1
    # Largeur du canal. On doit avoir LY > 2*L
 LY = 10*L
    # Longueur du canal. Les pixels sont carrés ssi LX = LY*nx/ny
@@ -49,7 +49,7 @@ veriffactor = 1
 
  ### PARAMETRES D'AFFICHAGE 
    # combien on affiche de frames (pertinent si save == False)
-nFrames = 20
+nFrames = 500
    # le nombre de dpi. 100 est la taille normale
 taille_figure = 100
    # on affiche la boule d'une couleur différente ?
@@ -57,7 +57,9 @@ display_form = False
    # la couleur (en format RGB avec des valeurs entre 0 et 1 OU entre 0 et 255)
 color_form = [0.2, 0.1, 0.1]
    # est ce qu'on sauvegarde
-save = False
+save = True
+   #Mettre en plein écran l'image pour un maximum de résolution
+maximize = False
 '''
 save_mode : choisis le mode d'enregistrement. Deux possibilités : 
      * 'iterations'   -> On enregistre toutes les Delta_n etapes
@@ -65,7 +67,7 @@ save_mode : choisis le mode d'enregistrement. Deux possibilités :
 '''
 save_mode = 'iterations'
    # l'endroit où on sauvegarde
-save_directory = 'Figures'
+save_directory = 'Figures/Temp'
    # le detail low, mid, top, max
 qualite_video = 'max'
 '''
@@ -77,9 +79,9 @@ affichage : ce qu'on affiche. Plusieurs possibilités :
     * 'rot'  : affichage du rotationnel
     * 'p'    : affichae de la pression
 '''
-affichage = 'p'
+affichage = 'col'
 # flux de colorant : 'all' ou un nombre
-nombreDeStreams = 9			
+nombreDeStreams = 21			
 # le scaling
 '''
 affichage : l'actualisation de l'échelle de couleurs. Plusieurs possibilités :
@@ -118,7 +120,7 @@ dmin = min(dx,dy)
    # utile pour le laplacien
 dx_2 = 1./dx**2 ; dy_2 = 1./dy**2  
    # différentielle temporelle (à choisir le plus grand possible, sera rapetissé de toutes façon à la fin)
-dt = 1
+dt = 0.1
    # application de veriffactor
 precautionADV /= veriffactor
 precautionDIFF /= veriffactor ; 
@@ -132,11 +134,27 @@ if (mode == 'time_bounded'):
 #Création de la liste d'objets:
 l_objects = []
 
-l_objects.append(Cylinder(x_c=x_c,y_c=y_c))
+l_objects.append(R_Bar(long=1,larg=0.2,x_c=x_c,y_c=y_c))
 
  ### PARAMETRES D'AFFICHAGE 
   ## Affichage de la figure
+
 fig = plt.figure(dpi=taille_figure)
+
+figsize = plt.gcf().get_size_inches()
+
+def set_size(w,h, ax=None):
+    """ w, h: width, height in inches 
+    Permet de choisir la taille du graphique en ajustant la fenêtre"""
+    if not ax: ax=plt.gca()
+    l = ax.figure.subplotpars.left
+    r = ax.figure.subplotpars.right
+    t = ax.figure.subplotpars.top
+    b = ax.figure.subplotpars.bottom
+    figw = float(w)/(r-l)
+    figh = float(h)/(t-b)
+    ax.figure.set_size_inches(figw, figh)
+
   ## Frequence d'affichage
    # nombre de frames
 if (save):
@@ -267,6 +285,7 @@ y_gp = np.arange(-y_step,LY+1.5*y_step,y_step)
 ox,oy = np.meshgrid(x_gp,y_gp)
 
 AFF = plt.imshow(np.zeros([ny,nx]), cmap, extent=[-x_c,LX-x_c,-y_c,LY-y_c])					#fenêtre graphique actualisée
+
 if (autoscale == 'no'):
     AFF.set_clim(vmin=vmin, vmax = vmax)
 
@@ -279,9 +298,12 @@ if (display_form):
     
     plt.imshow(z[1:-1,1:-1,:], extent=[-x_c,LX-x_c,-y_c,LY-y_c])
 
-plt.colorbar(AFF,fraction=0.0232, pad=0.04)
 
-plt.show()
+plt.colorbar(AFF,fraction=0.0232, pad=0.04)
+ax = plt.gcf().axes[0]
+axpos = ax.get_position()
+axsize = (axpos.bounds[2:]*plt.gcf().get_size_inches())
+realdpi = max(NX/axsize[0],NY/axsize[1])
 
 compt = 0    # Permet de savoir combien de frame ont été affichées
 
