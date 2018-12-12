@@ -79,7 +79,7 @@ affichage : ce qu'on affiche. Plusieurs possibilités :
     * 'rot'  : affichage du rotationnel
     * 'p'    : affichae de la pression
 '''
-affichage = 'col'
+affichage = 'rot'
 # flux de colorant : 'all' ou un nombre
 nombreDeStreams = 21			
 # le scaling
@@ -134,7 +134,7 @@ if (mode == 'time_bounded'):
 #Création de la liste d'objets:
 l_objects = []
 
-l_objects.append(R_Bar(long=1,larg=0.2,x_c=x_c,y_c=y_c))
+l_objects.append(R_Bar(long=2,larg=1,x_c=x_c,y_c=y_c))
 
  ### PARAMETRES D'AFFICHAGE 
   ## Affichage de la figure
@@ -142,18 +142,6 @@ l_objects.append(R_Bar(long=1,larg=0.2,x_c=x_c,y_c=y_c))
 fig = plt.figure(dpi=taille_figure)
 
 figsize = plt.gcf().get_size_inches()
-
-def set_size(w,h, ax=None):
-    """ w, h: width, height in inches 
-    Permet de choisir la taille du graphique en ajustant la fenêtre"""
-    if not ax: ax=plt.gca()
-    l = ax.figure.subplotpars.left
-    r = ax.figure.subplotpars.right
-    t = ax.figure.subplotpars.top
-    b = ax.figure.subplotpars.bottom
-    figw = float(w)/(r-l)
-    figh = float(h)/(t-b)
-    ax.figure.set_size_inches(figw, figh)
 
   ## Frequence d'affichage
    # nombre de frames
