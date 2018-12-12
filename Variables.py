@@ -89,7 +89,7 @@ affichage : l'actualisation de l'échelle de couleurs. Plusieurs possibilités :
     * 'full' : utilise une échelle adaptée à chaque affichage
     * 'adaptative' : utilise l'échelle adaptée la plus large
 '''
-autoscale = 'full' # full
+autoscale = 'adaptative' # full
 vmin, vmax = -0.25, 1.25			#quand autoscale = 'no', determine les bornes de la colorbar
   ## Performances
    # montrer_perf : affiche les performances (le temps de chaque étape)
