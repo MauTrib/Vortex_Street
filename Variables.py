@@ -303,7 +303,7 @@ plt.colorbar(AFF,fraction=0.0232, pad=0.04)
 ax = plt.gcf().axes[0]
 axpos = ax.get_position()
 axsize = (axpos.bounds[2:]*plt.gcf().get_size_inches())
-realdpi = max(NX/axsize[0],NY/axsize[1])
+realdpi = np.ceil(max(NX/axsize[0],NY/axsize[1]))
 
 compt = 0    # Permet de savoir combien de frame ont été affichées
 
