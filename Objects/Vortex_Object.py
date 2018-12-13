@@ -7,7 +7,7 @@ Created on Thu Dec 13 10:55:04 2018
 
 class Vortex_Object:
     
-    self.variables = []
+    variables = []
     
     def __init__(self):
         pass
