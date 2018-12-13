@@ -8,7 +8,7 @@ from Objects.Vortex_Object import constant_rotation
 from Objects.Cylinder import Cylinder
 from Objects.Rotating_Bar import R_Bar
 
-
+##FONCTION A GARDER ABSOLUMENT DANS CE FICHIER MAIN!
 def get_vars(demanding_object):
     """
     A partir d'un objet (héritant de la classe Vortex_Object), renvoie la liste des variables nécessaires à l'exécution de la fonction intégrée à l'objet (None si l'objjet n'en a pas)
