@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from fonctions import *
+
 from Objects.Cylinder import Cylinder
 from Objects.Rotating_Bar import R_Bar
 
@@ -26,7 +27,7 @@ mode : choisis le mode d'intégration. Trois possibilités :
 '''
 mode = 'iterations'
    # Combien de timesteps au maximum on s'autorise
-nitermax = 20000
+nitermax = 3000
    # Nombre de pixels du domaine :
 NX = 256*1 ; NY = 128*1 + 1
    # Largeur du canal. On doit avoir LY > 2*L
@@ -134,7 +135,12 @@ if (mode == 'time_bounded'):
 #Création de la liste d'objets:
 l_objects = []
 
-l_objects.append(R_Bar(long=2,larg=1,x_c=x_c,y_c=y_c))
+#Exemple de création d'une barre tournant de manière constante
+barre = R_Bar(long=2,larg=1,x_c=x_c,y_c=y_c)
+barre.period = 50 #Periode de rotation 50s
+barre.set_function(constant_rotation)
+
+l_objects.append(barre)
 
  ### PARAMETRES D'AFFICHAGE 
   ## Affichage de la figure

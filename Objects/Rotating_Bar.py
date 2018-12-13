@@ -1,7 +1,7 @@
 import numpy as np
-from Objects.Vortex_Object import Vortex_Object
+from Objects.Vortex_Object import *
 
-class R_Bar:
+class R_Bar(Rotating_Object):
     
     def __init__(self,larg=1,long=1,x_c=0,y_c=0,theta=0):
         self.x_c = x_c

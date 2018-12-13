@@ -11,6 +11,7 @@ from PyQt5 import QtWidgets # affichage (reactualisation)
 import matplotlib.colors as colors # faire des jolies couleurs
 import time as time # montrer_performances (affiche la durée réelle du programme)
 
+from Objects.Vortex_Object import constant_rotation
 
 ### FONCTIONS
 
@@ -221,17 +222,8 @@ def conditions_limites(f,g,d,h,b):
     else:
         f[-1,1:-1] = d*np.ones(nx)
 
-def Apply_objects(f,xx,yy,l_objects):
-    """
-    Applique un objet sur un array.
-    Dans un objet, la vitesse est mise à zéro.
-    Entrées: - f, l'array
-             - xx,yy : les deux composantes d'un meshgrid
-             - l_objects : liste d'objets, chacun possédant une fonction "get_mask(xx,yy)"
-    """
-    for objet in l_objects:
-        f[objet.get_mask(xx,yy)]=0
-    return f
+
+
 
 def ConditionLimites(u,v,U):
     """Conditions aux limites aux bords du domaine"""
@@ -251,3 +243,18 @@ def ConditionLimites(u,v,U):
   #Down
     u[-1,1:-1] = u[-3,1:-1] #gradient de la vitesse nul selon x en bas
     v[-1,1:-1] = np.zeros(nx) #condition de non pénétration (vitesse verticale nulle)
+
+def Apply_objects(f,xx,yy,l_objects):
+    """
+    Applique un objet sur un array.
+    Dans un objet, la vitesse est mise à zéro.
+    Entrées: - f, l'array
+             - xx,yy : les deux composantes d'un meshgrid
+             - l_objects : liste d'objets, chacun possédant une fonction "get_mask(xx,yy)"
+    """
+    for objet in l_objects:
+        f[objet.get_mask(xx,yy)]=0
+    return f
+
+
+

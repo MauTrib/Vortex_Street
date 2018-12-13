@@ -3,11 +3,30 @@
 # Import des autres fichiers
 
 from fonctions import *
+from Variables import *
+from Objects.Vortex_Object import constant_rotation
 from Objects.Cylinder import Cylinder
 from Objects.Rotating_Bar import R_Bar
-from Variables import *
 
 
+def get_vars(demanding_object):
+    """
+    A partir d'un objet (héritant de la classe Vortex_Object), renvoie la liste des variables nécessaires à l'exécution de la fonction intégrée à l'objet (None si l'objjet n'en a pas)
+    """
+    d_var = {}
+    for key in demanding_object.demanded:
+        try:
+            d_var[key]=eval(key)
+            print(key,d_var[key])
+        except:
+            print("Variable {} not found".format(key))
+    return (d_var)
+
+def Update_objects(l_objects):
+    for objet in l_objects:
+        d_var = get_vars(objet)
+        objet.update(**d_var)
+    return None
 
 print("Début des calculs...")
 t_deb = time.time()
@@ -82,7 +101,7 @@ while (dontstop):
         t_ref = t
         compt+=1
         #print(np.sum(c))
-        l_objects[0].theta += 2*np.pi *dt/50
+        Update_objects(l_objects)
         #affichage
          
         if (affichage == 'col'):
