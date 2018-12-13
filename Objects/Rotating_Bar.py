@@ -1,4 +1,5 @@
 import numpy as np
+from Objects.Vortex_Object import Vortex_Object
 
 class R_Bar:
     
