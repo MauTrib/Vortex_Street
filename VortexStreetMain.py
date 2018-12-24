@@ -8,7 +8,8 @@ from Objects.Vortex_Object import constant_rotation
 from Objects.Cylinder import Cylinder
 from Objects.Rotating_Bar import R_Bar
 
-##FONCTION A GARDER ABSOLUMENT DANS CE FICHIER MAIN!
+
+##FONCTIONS A GARDER ABSOLUMENT DANS CE FICHIER MAIN!
 def get_vars(demanding_object):
     """
     A partir d'un objet (héritant de la classe Vortex_Object), renvoie la liste des variables nécessaires à l'exécution de la fonction intégrée à l'objet (None si l'objjet n'en a pas)
@@ -17,7 +18,6 @@ def get_vars(demanding_object):
     for key in demanding_object.demanded:
         try:
             d_var[key]=eval(key)
-            print(key,d_var[key])
         except:
             print("Variable {} not found".format(key))
     return (d_var)
@@ -79,6 +79,7 @@ while (dontstop):
     divstar = divergence(ustar,vstar,dx,dy)                    #Calcul de la divergence de u*
     phi[1:-1,1:-1] = ResoLap(LUPoisson,divstar[1:-1,1:-1])        #Résolution du système
     PhiGhostPoints(phi)                                #Mise à jour des points fantomes de phi
+    p = phi[1:-1,1:-1]/dt
     u = ustar-grad(phi,dx,dy)[0]                            #Calcul de u et v
     v = vstar-grad(phi,dx,dy)[1]
     
@@ -96,6 +97,7 @@ while (dontstop):
     u = Apply_objects(u,ox,oy,l_objects)                                            #Sur l'obstacle, penalisation
     v = Apply_objects(v,ox,oy,l_objects)                                             #Sur l'obstacle, penalisation
     col = Rescol
+    col = Apply_objects(col,ox,oy,l_objects)
     #AFFICHAGE DE LA FIGURE
     if ( (save_mode == 'iterations') and (nitermax-niter-1)%modulo == 0 ) or ( save and ( (save_mode == 'time') and ( (t-t_ref) > modulo ) ) ):
         t_ref = t

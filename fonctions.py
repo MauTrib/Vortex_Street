@@ -3,6 +3,7 @@ Fonctions
 """
 
 import matplotlib.pyplot as plt # affichage
+plt.rcParams["image.origin"]='lower'
 import numpy as np # calculs
 import os
 import scipy.sparse as sp # matrices (pour Poisson)
@@ -255,6 +256,5 @@ def Apply_objects(f,xx,yy,l_objects):
     for objet in l_objects:
         f[objet.get_mask(xx,yy)]=0
     return f
-
 
 

@@ -3,7 +3,7 @@
 from fonctions import *
 
 from Objects.Cylinder import Cylinder
-from Objects.Rotating_Bar import R_Bar
+from Objects.Rotating_Bar import R_Bar,apply_pressure
 
 #### PARAMETRES CHOISIS PAR L'UTILISATEURICE (à modifier pour changer le résultat) 
 #----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -27,7 +27,7 @@ mode : choisis le mode d'intégration. Trois possibilités :
 '''
 mode = 'iterations'
    # Combien de timesteps au maximum on s'autorise
-nitermax = 3000
+nitermax = 1000
    # Nombre de pixels du domaine :
 NX = 256*1 ; NY = 128*1 + 1
    # Largeur du canal. On doit avoir LY > 2*L
@@ -50,7 +50,7 @@ veriffactor = 1
 
  ### PARAMETRES D'AFFICHAGE 
    # combien on affiche de frames (pertinent si save == False)
-nFrames = 500
+nFrames = np.min((nitermax,500))
    # le nombre de dpi. 100 est la taille normale
 taille_figure = 100
    # on affiche la boule d'une couleur différente ?
@@ -58,7 +58,7 @@ display_form = False
    # la couleur (en format RGB avec des valeurs entre 0 et 1 OU entre 0 et 255)
 color_form = [0.2, 0.1, 0.1]
    # est ce qu'on sauvegarde
-save = True
+save = False
    #Mettre en plein écran l'image pour un maximum de résolution
 maximize = False
 '''
@@ -80,9 +80,9 @@ affichage : ce qu'on affiche. Plusieurs possibilités :
     * 'rot'  : affichage du rotationnel
     * 'p'    : affichae de la pression
 '''
-affichage = 'rot'
+affichage = 'p'
 # flux de colorant : 'all' ou un nombre
-nombreDeStreams = 21			
+nombreDeStreams = 9			
 # le scaling
 '''
 affichage : l'actualisation de l'échelle de couleurs. Plusieurs possibilités :
@@ -140,7 +140,11 @@ barre = R_Bar(long=2,larg=1,x_c=x_c,y_c=y_c)
 barre.period = 50 #Periode de rotation 50s
 barre.set_function(constant_rotation)
 
-l_objects.append(barre)
+barre2 = R_Bar(x_c = x_c,y_c=y_c,long=2,larg=0.2,period=50)
+barre2.set_function(apply_pressure)
+
+#l_objects.append(barre)
+l_objects.append(barre2)
 
  ### PARAMETRES D'AFFICHAGE 
   ## Affichage de la figure
@@ -243,7 +247,7 @@ else:
     print("Parametre d'affichage non reconnu !")
   ## Performances
    # les temps des différentes étapes
-tadv, tdiff, tphi, taff = 0, 0, 0, 0
+tadv, tdiff, tphi, taff= 0, 0, 0, 0
 
 
 ###CONDITIONS INITIALES (avec les points fantômes)

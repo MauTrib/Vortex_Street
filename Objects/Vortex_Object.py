@@ -21,7 +21,10 @@ class Vortex_Object:
         """
         Sera appelé à chaque temps pour update l'objet
         """
-        self.function(self,**kwargs)
+        if (kwargs)=={}:
+            self.function()
+        else:
+            self.function(self,**kwargs)
         return None
     
     def set_function(self,func):
@@ -40,6 +43,11 @@ class Rotating_Object(Vortex_Object):
     
     theta = 0
     period = 50
+    
+    def rotation(self,x,y,theta):
+        x_r = x*np.cos(theta) - y*np.sin(theta)
+        y_r = x*np.sin(theta)+ y*np.cos(theta)
+        return x_r,y_r
 
 
 def constant_rotation(objet,dt):
