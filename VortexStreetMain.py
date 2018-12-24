@@ -103,7 +103,9 @@ while (dontstop):
         t_ref = t
         compt+=1
         #print(np.sum(c))
+        t_u0 = time.time()
         Update_objects(l_objects)
+        tupdate += time.time()-t_u0
         #affichage
          
         if (affichage == 'col'):
@@ -181,6 +183,7 @@ if (montrer_perf):
     print('\nDuree de l\'étape d\'advection  : '+disptime(tadv)+
           '\nDuree de l\'étape de diffusion : '+disptime(tdiff)+
           '\nDuree de l\'étape de pression  : '+disptime(tphi)+
-          '\nDuree de l\'étape d\'affichage  : '+disptime(taff))
+          '\nDuree de l\'étape d\'affichage  : '+disptime(taff) +
+          '\nDuree de l\'étape d\'update des objets  : ' + disptime(tupdate))
     
 print("Fin du programme.")

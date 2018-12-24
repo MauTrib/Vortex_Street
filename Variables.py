@@ -247,7 +247,7 @@ else:
     print("Parametre d'affichage non reconnu !")
   ## Performances
    # les temps des différentes étapes
-tadv, tdiff, tphi, taff= 0, 0, 0, 0
+tadv, tdiff, tphi, taff, tupdate= 0, 0, 0, 0, 0
 
 
 ###CONDITIONS INITIALES (avec les points fantômes)
