@@ -99,13 +99,14 @@ while (dontstop):
     col = Rescol
     col = Apply_objects(col,ox,oy,l_objects)
     #AFFICHAGE DE LA FIGURE
+    t_u0 = time.time()
+    Update_objects(l_objects)
+    tupdate += time.time()-t_u0
     if ( (save_mode == 'iterations') and (nitermax-niter-1)%modulo == 0 ) or ( save and ( (save_mode == 'time') and ( (t-t_ref) > modulo ) ) ):
         t_ref = t
         compt+=1
         #print(np.sum(c))
-        t_u0 = time.time()
-        Update_objects(l_objects)
-        tupdate += time.time()-t_u0
+        
         #affichage
          
         if (affichage == 'col'):

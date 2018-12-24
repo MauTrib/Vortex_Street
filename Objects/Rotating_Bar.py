@@ -112,7 +112,7 @@ def apply_pressure(objet,p,xx,yy,dt):
         dy = yy[1,0]-yy[0,0]
         for k in range(len(l_x)):
             i,j = i_y[k],i_x[k]
-            x,y,x_m,y_m = l_x[i],l_y[i],xx[i,j],yy[i,j]
+            x,y,x_m,y_m = l_x[k],l_y[k],xx[i,j],yy[i,j]
             deltax = x-x_m
             deltay = y-y_m
             

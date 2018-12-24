@@ -27,7 +27,7 @@ mode : choisis le mode d'intégration. Trois possibilités :
 '''
 mode = 'iterations'
    # Combien de timesteps au maximum on s'autorise
-nitermax = 1000
+nitermax = 5000
    # Nombre de pixels du domaine :
 NX = 256*1 ; NY = 128*1 + 1
    # Largeur du canal. On doit avoir LY > 2*L
