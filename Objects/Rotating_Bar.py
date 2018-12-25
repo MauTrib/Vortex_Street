@@ -142,7 +142,7 @@ def apply_pressure(objet,p,xx,yy,dt):
     moments = np.sign(c_x)*np.sign(c_y)*np.sign((y_frac - x_frac)) #Sign
     moments = moments * (np.heaviside(y_frac-x_frac,0)*(np.abs(c_x)*l_p*ds) + np.heaviside(x_frac-y_frac,0)*np.abs(c_y)*l_p*ds) #Value
     
-    print(np.sum(moments))
+    #print(np.sum(moments))
     
     theta_pp = (1/J)*np.sum(moments)
     objet.theta_p += theta_pp*dt
