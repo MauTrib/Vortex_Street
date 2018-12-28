@@ -27,7 +27,7 @@ mode : choisis le mode d'intégration. Trois possibilités :
 '''
 mode = 'iterations'
    # Combien de timesteps au maximum on s'autorise
-nitermax = 10000
+nitermax = 5000
    # Nombre de pixels du domaine :
 NX = 256*1 ; NY = 128*1 + 1
    # Largeur du canal. On doit avoir LY > 2*L
@@ -139,9 +139,9 @@ l_objects = []
 barre = R_Bar(long=2,larg=1,x_c=x_c,y_c=y_c)
 barre.period = 50 #Periode de rotation 50s
 
-barre2 = R_Bar(x_c = x_c+3,y_c=y_c+3,long=2,larg=0.5)
+barre2 = R_Bar(x_c = x_c+3,y_c=y_c,long=2,larg=0.5)
 barre2.set_function(apply_pressure)
-l_objects.append(Cylinder(x_c=x_c,y_c=y_c))
+#l_objects.append(Cylinder(x_c=x_c,y_c=y_c))
 #l_objects.append(barre)
 l_objects.append(barre2)
 
@@ -292,7 +292,9 @@ if (display_form):
     z[:,:,0] = color_form[0]
     z[:,:,1] = color_form[1]
     z[:,:,2] = color_form[2]
-    z[(ox-x_c)**2+(oy-y_c)**2 < L**2,-1] = 1
+    for objet in l_objects:
+        z[objet.get_mask(ox,oy),-1]=1
+    #z[(ox-x_c)**2+(oy-y_c)**2 < L**2,-1] = 1
     
     plt.imshow(z[1:-1,1:-1,:], extent=[-x_c,LX-x_c,-y_c,LY-y_c])
 

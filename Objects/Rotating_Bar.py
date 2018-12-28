@@ -126,7 +126,7 @@ def apply_pressure(objet,p,xx,yy,dt):
     if classe == 'R_Bar':
         b = objet.long
         c = objet.larg
-        J = 1.8e3 * ((b*c)/12)*(b**2 + c**2) #Masse volumique fibre carbone
+        J = 10 * ((b*c)/12)*(b**2 + c**2) #Masse volumique fibre carbone : 1.8e3
     else:
         J=1
         print("WARNING : object type {} has no defined Inertial moment in function 'apply_pressure'.\nInertial moment put to 1.".format(classe))
@@ -135,11 +135,15 @@ def apply_pressure(objet,p,xx,yy,dt):
         objet.theta_p = 0
     
     c_x,c_y = objet.set_contour(proper_referential=True)
+    #print(c_x)
+    #print(c_y)
     x_frac,y_frac = np.abs(c_x)/np.max(c_x),np.abs(c_y)/np.max(c_y)
-    
+    #print((y_frac))
+    #print(x_frac)
     ds = 2*(objet.long+objet.larg)/len(c_x)
     
-    moments = np.sign(c_x)*np.sign(c_y)*np.sign((y_frac - x_frac)) #Sign
+    moments = np.sign(c_x)*np.sign(c_y)*np.sign((x_frac - y_frac)) #Sign
+    #print(moments)
     moments = moments * (np.heaviside(y_frac-x_frac,0)*(np.abs(c_x)*l_p*ds) + np.heaviside(x_frac-y_frac,0)*np.abs(c_y)*l_p*ds) #Value
     
     #print(np.sum(moments))
