@@ -245,7 +245,7 @@ def ConditionLimites(u,v,U):
     u[-1,1:-1] = u[-3,1:-1] #gradient de la vitesse nul selon x en bas
     v[-1,1:-1] = np.zeros(nx) #condition de non pénétration (vitesse verticale nulle)
 
-def Apply_objects(f,xx,yy,l_objects):
+def Apply_objects(f,xx,yy,l_objects,value=0):
     """
     Applique un objet sur un array.
     Dans un objet, la vitesse est mise à zéro.
@@ -254,7 +254,7 @@ def Apply_objects(f,xx,yy,l_objects):
              - l_objects : liste d'objets, chacun possédant une fonction "get_mask(xx,yy)"
     """
     for objet in l_objects:
-        f[objet.get_mask(xx,yy)]=0
+        f[objet.get_mask(xx,yy)]=value
     return f
 
 

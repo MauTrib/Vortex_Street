@@ -40,7 +40,10 @@ class R_Bar(Rotating_Object):
     def __repr__(self):
         return "Rotating Bar object\nCenter={}, Angle={}, dimensions={}".format(self.center,self.theta,(self.long,self.larg))
 
-    def set_contour(self,resolution=100,proper_referential = False,debug=False):
+    def set_contour(self,resolution=None,proper_referential = False,debug=False):
+        if resolution==None:
+            resolution = self.resolution
+        
         tot_long = 2*(self.long + self.larg)
         r_long = self.long/tot_long #Ratio de longueur, donnera le nombre de point
         r_larg = self.larg/tot_long
@@ -126,7 +129,7 @@ def apply_pressure(objet,p,xx,yy,dt):
     if classe == 'R_Bar':
         b = objet.long
         c = objet.larg
-        J = 10 * ((b*c)/12)*(b**2 + c**2) #Masse volumique fibre carbone : 1.8e3
+        J = 30 * ((b*c)/12)*(b**2 + c**2) #Masse volumique fibre carbone : 1.8e3
     else:
         J=1
         print("WARNING : object type {} has no defined Inertial moment in function 'apply_pressure'.\nInertial moment put to 1.".format(classe))

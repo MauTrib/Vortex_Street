@@ -2,7 +2,7 @@
    
 # Import des autres fichiers
 
-from fonctions import *
+
 from Variables import *
 from Objects.Vortex_Object import constant_rotation
 from Objects.Cylinder import Cylinder
@@ -127,7 +127,7 @@ while (dontstop):
             mat = phi[1:-1,1:-1]/dt
             title = 'Pressure p'
         
-        AFF.set_data(mat)
+        
         if (autoscale == 'full'): # si jamais il faut autoscale, le faire
             AFF.autoscale()
         elif (autoscale == 'adaptative'):
@@ -141,6 +141,11 @@ while (dontstop):
                 vmax = np.max(np.abs([vmin, vmax]))
                 vmin = -vmax
             AFF.set_clim(vmin = vmin, vmax = vmax)
+        
+        if (display_form): #Si on veut afficher les objets
+            mat = Apply_objects(mat,xx,yy,l_objects,None) #Mets des 0 si le point est dans un objet
+            
+        AFF.set_data(mat)
         
         
         plt.title(title+'\nRe = '+str(Re)+', L =  '+str(L)+', U = '+str(U)+'\n t = '+str(round(t,2))+' , n = '+str(niter+1)+'/'+str(nitermax)+'\n(frame '+str(compt)+'/'+nFramesReal+')')

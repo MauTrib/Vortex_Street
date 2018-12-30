@@ -2,6 +2,8 @@
 
 from fonctions import *
 
+import matplotlib.cm as cm
+
 from Objects.Cylinder import Cylinder
 from Objects.Rotating_Bar import R_Bar,apply_pressure
 
@@ -27,7 +29,7 @@ mode : choisis le mode d'intégration. Trois possibilités :
 '''
 mode = 'iterations'
    # Combien de timesteps au maximum on s'autorise
-nitermax = 5000
+nitermax = 3000
    # Nombre de pixels du domaine :
 NX = 256*1 ; NY = 128*1 + 1
    # Largeur du canal. On doit avoir LY > 2*L
@@ -54,9 +56,22 @@ nFrames = np.min((nitermax,500))
    # le nombre de dpi. 100 est la taille normale
 taille_figure = 100
    # on affiche la boule d'une couleur différente ?
-display_form = False
+display_form = True
    # la couleur (en format RGB avec des valeurs entre 0 et 1 OU entre 0 et 255)
-color_form = [0.2, 0.1, 0.1]
+color_form = [0.4, 0.4, 0.4]
+   #Création de la liste d'objets:
+l_objects = []
+
+#Exemple de création d'une barre tournant de manière constante
+barre = R_Bar(long=2,larg=1,x_c=x_c,y_c=y_c)
+barre.period = 50 #Periode de rotation 50s
+
+barre2 = R_Bar(x_c = x_c,y_c=y_c,long=2,larg=0.5,resolution=500)
+barre2.set_function(apply_pressure)
+l_objects.append(Cylinder(x_c=x_c,y_c=y_c))
+#l_objects.append(barre)
+#l_objects.append(barre2)
+
    # est ce qu'on sauvegarde
 save = False
    #Mettre en plein écran l'image pour un maximum de résolution
@@ -78,7 +93,7 @@ affichage : ce qu'on affiche. Plusieurs possibilités :
     * 'v'    : affichage de la vitesse verticale 
     * 'abs'  : affichage de la norme de la vitesse
     * 'rot'  : affichage du rotationnel
-    * 'p'    : affichae de la pression
+    * 'p'    : affichage de la pression
 '''
 affichage = 'p'
 # flux de colorant : 'all' ou un nombre
@@ -131,19 +146,6 @@ dt_exp = CFL_diffusion(D,dmin,precautionDIFF)
    # Combien de timesteps au maximum on s'autorise
 if (mode == 'time_bounded'):
     nitermax = int( 2.* tfinal / min( dt, dt_exp, dmin/U * precautionADV ) )
-
-#Création de la liste d'objets:
-l_objects = []
-
-#Exemple de création d'une barre tournant de manière constante
-barre = R_Bar(long=2,larg=1,x_c=x_c,y_c=y_c)
-barre.period = 50 #Periode de rotation 50s
-
-barre2 = R_Bar(x_c = x_c+3,y_c=y_c,long=2,larg=0.5)
-barre2.set_function(apply_pressure)
-#l_objects.append(Cylinder(x_c=x_c,y_c=y_c))
-#l_objects.append(barre)
-l_objects.append(barre2)
 
  ### PARAMETRES D'AFFICHAGE 
   ## Affichage de la figure
@@ -245,6 +247,11 @@ elif (affichage == 'p'):
     cmap = 'inferno'
 else:
     print("Parametre d'affichage non reconnu !")
+
+if display_form:
+    cmap = cm.get_cmap(cmap)
+    cmap.set_bad(color_form)
+
   ## Performances
    # les temps des différentes étapes
 tadv, tdiff, tphi, taff, tupdate= 0, 0, 0, 0, 0
@@ -286,18 +293,6 @@ AFF = plt.imshow(np.zeros([ny,nx]), cmap, extent=[-x_c,LX-x_c,-y_c,LY-y_c])					
 
 if (autoscale == 'no'):
     AFF.set_clim(vmin=vmin, vmax = vmax)
-
-if (display_form):
-    z = np.zeros([NY, NX, 4])
-    z[:,:,0] = color_form[0]
-    z[:,:,1] = color_form[1]
-    z[:,:,2] = color_form[2]
-    for objet in l_objects:
-        z[objet.get_mask(ox,oy),-1]=1
-    #z[(ox-x_c)**2+(oy-y_c)**2 < L**2,-1] = 1
-    
-    plt.imshow(z[1:-1,1:-1,:], extent=[-x_c,LX-x_c,-y_c,LY-y_c])
-
 
 plt.colorbar(AFF,fraction=0.0232, pad=0.04)
 ax = plt.gcf().axes[0]
