@@ -4,6 +4,7 @@ from Objects.Vortex_Object import Vortex_Object
 
 class Cylinder(Vortex_Object):
     
+
     def __init__(self,R=1,x_c=0,y_c=0):
         self.x_c = x_c
         self.y_c = y_c

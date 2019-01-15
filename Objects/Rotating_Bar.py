@@ -57,6 +57,7 @@ class R_Bar(Rotating_Object):
         #plt.scatter(c_x,c_y,label="Avant translation")
         if proper_referential:
             return c_x,c_y
+        
         c_x,c_y = self.rotation(c_x,c_y,self.theta)
         #plt.scatter(c_x,c_y,label="Après rotation")
         c_x += self.x_c
@@ -129,7 +130,7 @@ def apply_pressure(objet,p,xx,yy,dt):
     if classe == 'R_Bar':
         b = objet.long
         c = objet.larg
-        J = 30 * ((b*c)/12)*(b**2 + c**2) #Masse volumique fibre carbone : 1.8e3
+        J = 10 * ((b*c)/12)*(b**2 + c**2) #Masse volumique fibre carbone : 1.8e3
     else:
         J=1
         print("WARNING : object type {} has no defined Inertial moment in function 'apply_pressure'.\nInertial moment put to 1.".format(classe))

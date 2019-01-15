@@ -95,7 +95,7 @@ affichage : ce qu'on affiche. Plusieurs possibilités :
     * 'rot'  : affichage du rotationnel
     * 'p'    : affichage de la pression
 '''
-affichage = 'p'
+affichage = 'abs'
 # flux de colorant : 'all' ou un nombre
 nombreDeStreams = 9			
 # le scaling

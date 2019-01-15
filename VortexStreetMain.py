@@ -110,13 +110,13 @@ while (dontstop):
         #affichage
          
         if (affichage == 'col'):
-            mat = col[1:-1,1:-1] 
+            mat = np.copy(col[1:-1,1:-1])
             title = 'colorant'
         elif (affichage == 'u'):
-            mat = u[1:-1,1:-1]
+            mat = np.copy(u[1:-1,1:-1])
             title = r'$u_x$'
         elif (affichage == 'v'):
-            mat = v[1:-1,1:-1]
+            mat = np.copy(v[1:-1,1:-1])
             title = r'$u_y$'
         elif (affichage == 'abs'):
             mat = np.sqrt( u[1:-1,1:-1]**2 + v[1:-1,1:-1]**2 )
@@ -124,7 +124,7 @@ while (dontstop):
             mat = rot(u,v,dx,dy)
             title = r'$\omega$ = curl(v)'
         elif (affichage == 'p'):
-            mat = phi[1:-1,1:-1]/dt
+            mat = np.copy(phi[1:-1,1:-1])/dt
             title = 'Pressure p'
         
         
@@ -143,7 +143,7 @@ while (dontstop):
             AFF.set_clim(vmin = vmin, vmax = vmax)
         
         if (display_form): #Si on veut afficher les objets
-            mat = Apply_objects(mat,xx,yy,l_objects,None) #Mets des 0 si le point est dans un objet
+            mat = Apply_objects(mat,xx,yy,l_objects,None) #Mets des None si le point est dans un objet
             
         AFF.set_data(mat)
         
@@ -182,6 +182,7 @@ print("Fin des calculs.")
 
 print('Final time : '+str(t))
 print('Number of timesteps : '+str(niter))
+print('FPS : ' + str(int(nFramesReal)//t))
 
 
 if (montrer_perf):
