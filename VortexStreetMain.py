@@ -49,8 +49,8 @@ while (dontstop):
     
     #ETAPE DE DIFFUSION
     if (RK2):
-        ustar = Resu + D*Laplacien( Resu + dt/2 * D*Laplacien(u,dx_2,dy_2) ,dx_2,dy_2) * dt
-        vstar = Resv + D*Laplacien( Resv + dt/2 * D*Laplacien(v,dx_2,dy_2) ,dx_2,dy_2) * dt
+        ustar = Resu + D*Laplacien( u + dt/2 * D*Laplacien(u,dx_2,dy_2) ,dx_2,dy_2) * dt
+        vstar = Resv + D*Laplacien( v + dt/2 * D*Laplacien(v,dx_2,dy_2) ,dx_2,dy_2) * dt
     else:
         ustar = Resu + D*Laplacien(u,dx_2,dy_2)*dt
         vstar = Resv + D*Laplacien(v,dx_2,dy_2)*dt
