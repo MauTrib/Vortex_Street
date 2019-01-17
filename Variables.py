@@ -46,7 +46,7 @@ precautionADV = 0.95
    # Marge sur le temps de diffusion pour éviter la divergence : dt = precautionDIFF*dt_calculé							
 precautionDIFF = 0.9 												
    # RK2 : utilise une méthode RK2 pour le Laplacien (sécurité à bas Re)
-RK2 = True
+RK2 = False
    # veriffactor : si 1, ne fait rien ; si > 1 : fait la même simulation avec des plus petits pas de temps
 veriffactor = 1
 
